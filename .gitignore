@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# PyCharm
+.idea/
+
+# 测试产物
+.pytest_cache/
+workspace/demo_project/tmp.txt
