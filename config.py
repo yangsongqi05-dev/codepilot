@@ -15,3 +15,4 @@ def get_headers():
         'Authorization': f'Bearer {key}',
         'Content-Type': 'application/json'
     }
+DOCKER_IMAGE = 'codepilot-python'
