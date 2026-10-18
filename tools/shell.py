@@ -84,8 +84,7 @@ if __name__ == '__main__':
     print(run_python('demo_project/probe.py'))
     print('---')
     print(run_tests('demo_project'))
-if __name__ == '__main__':
-    print(run_python('demo_project/loop.py', timeout=10))
+
 
 
 

@@ -16,3 +16,10 @@ def get_headers():
         'Content-Type': 'application/json'
     }
 DOCKER_IMAGE = 'codepilot-python'
+
+CHROMA_DIR = os.path.join(BASE_DIR, 'chroma_db')
+EMBED_MODEL = 'BAAI/bge-m3'
+EMBED_URL = 'https://api.siliconflow.cn/v1/embeddings'
+
+
+

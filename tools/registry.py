@@ -1,7 +1,7 @@
 
 from tools.fs import list_files, read_file, write_file, edit_file, search_code
 from tools.shell import run_python, run_tests, git_diff
-
+from tools.code_index import search_codebase
 TOOLS={
     'list_file':{
         'fn':list_files,
@@ -47,6 +47,12 @@ TOOLS={
         'desc': '看看工作区里改了什么（哪些文件动了+具体改动）',
         'params': {}
     },
+    'search_codebase': {
+        'fn': search_codebase,
+        'desc': '按语义搜索代码库：描述你想找的代码是干什么的，它返回最相关的几段代码',
+        'params': {'query': '(必填) 用一句话描述你要找什么，比如"计算平均值的逻辑"',
+                   'k': '(可选) 返回几段，默认 3'},
+    },
 }
 def tools_prompt():
     lines=[]
@@ -65,16 +71,10 @@ def call_tool(name,args):
     except Exception as e:
         return f'工具执行出错：{type(e).__name__}:{e}'
 
-# if __name__ == '__main__':
-#     print(tools_prompt())
-#     print('====')
-#     print(call_tool('read_file', {'rel': 'demo_project/calc.py'}))
-#     print('====')
-#     print(call_tool('nope', {}))
-#     print('====')
-#     print(call_tool('read_file', {'rel': '../../config.py'}))
-#     print('====')
-#     print(call_tool('read_file', {}))
+if __name__ == '__main__':
+    print(tools_prompt())
+    print('====')
+    print(call_tool('search_codebase', {'query': '怎么把一堆数加起来然后除以它们的个数'}))
 
 
 
