@@ -3,7 +3,7 @@ import os
 
 import chromadb
 import requests
-
+from tools.cache import get_embedding,set_embedding
 from config import WORKSPACE, CHROMA_DIR, EMBED_MODEL, EMBED_URL, get_headers
 from tools.fs import SKIP_DIRS
 
@@ -46,12 +46,19 @@ def collect_chunks():
                         print(f'跳过{rel}:语法错误{e.msg}')
         return all_chunks
 def embed(texts):
-        data = {'model':EMBED_MODEL,'input':texts}
-        resp = requests.post(EMBED_URL,json=data,headers=get_headers(),timeout=120)
-        if resp.status_code != 200:
-                raise RuntimeError(f'嵌入失败{resp.status_code}{resp.text[:200]}')
-        items = sorted(resp.json()['data'], key=lambda d:d['index'])
-        return [d['embedding'] for d in items]
+        vectors = [get_embedding(t) for t in texts]
+        missing = [i for i,v in enumerate(vectors) if v is None]
+        print(f'嵌套缓存命中{len(texts)-len(missing)}/{len(texts)}')
+        if missing:
+                data = {'model':EMBED_MODEL,'input':texts}
+                resp = requests.post(EMBED_URL,json=data,headers=get_headers(),timeout=120)
+                if resp.status_code != 200:
+                        raise RuntimeError(f'嵌入失败{resp.status_code}{resp.text[:200]}')
+                items = sorted(resp.json()['data'], key=lambda d:d['index'])
+                for pos,vec in zip(missing,[d['embedding'] for d in items]):
+                        vectors[pos] = vec
+                        set_embedding(texts[pos],vec)
+        return vectors
 def build_embed():
         chunks = collect_chunks()
         if not chunks:
@@ -88,17 +95,10 @@ def search_codebase(query,k=3):
                 lines.append(f"[{i+1}]{meta['rel']}:{meta['name']}:{meta['line']} 相似度{sim:.4f}\n"
                              f"{code[:600]}")
         return '\n'.join(lines)
+
 if __name__ == '__main__':
     n = build_embed()
-    print(f'索引完成，一共 {n} 块\n')
-
-    for q in ['怎么把一堆数加起来然后除以它们的个数',
-              '两个数字相除',
-              '验证平均数算得对不对']:
-        print('问：', q)
-        print(search_codebase(q))
-        print('-' * 45)
-
+    print(f'索引完成，一共 {n} 块')
 
 
 

@@ -21,5 +21,6 @@ CHROMA_DIR = os.path.join(BASE_DIR, 'chroma_db')
 EMBED_MODEL = 'BAAI/bge-m3'
 EMBED_URL = 'https://api.siliconflow.cn/v1/embeddings'
 
-
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
 
