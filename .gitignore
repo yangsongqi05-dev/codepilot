@@ -8,4 +8,4 @@ __pycache__/
 
 # 测试产物
 .pytest_cache/
-workspace/demo_project/tmp.txt
+workspace/demo_project/tmp.txtchroma_db/
