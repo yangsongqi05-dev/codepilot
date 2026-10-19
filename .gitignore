@@ -10,3 +10,4 @@ __pycache__/
 .pytest_cache/
 workspace/demo_project/tmp.txt
 chroma_db
+.env

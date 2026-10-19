@@ -1,6 +1,7 @@
 import sys
-from config import WORKSPACE,MAX_STEPS
+from config import WORKSPACE,MAX_STEPS,setup_logging
 from agent.loop import run
+setup_logging()
 def main():
     if len(sys.argv) < 2:
         print('用法：python main.py "你的任务"')

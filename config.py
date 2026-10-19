@@ -1,16 +1,19 @@
 import os
+import logging
+from dotenv import load_dotenv
+load_dotenv()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 WORKSPACE = os.path.join(BASE_DIR, 'workspace')
 
-API_KEY_FILE = r'E:\python\api_key.txt.txt'
+API_KEY = os.getenv('API_KEY', '')
 
 CHAT_MODEL = 'deepseek-ai/DeepSeek-v3'
 CHAT_URL='https://api.siliconflow.cn/v1/chat/completions'
 
 MAX_STEPS = 15
 def get_headers():
-    with open(API_KEY_FILE, encoding='utf_8') as f:
-        key = f.read().strip()
+    if not API_KEY:
+        raise RuntimeError('API_KEY not set')
     return {
         'Authorization': f'Bearer {key}',
         'Content-Type': 'application/json'
@@ -23,4 +26,27 @@ EMBED_URL = 'https://api.siliconflow.cn/v1/embeddings'
 
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
+
+LOG_LEVEL = 'DEBUG'
+def setup_logging():
+    logging.basicConfig(
+        level=LOG_LEVEL,
+        format ='%(asctime)s[%(levelname)s]%(name)s: %(message)s',
+        datefmt = '%H:%M:%S'
+    )
+    for noisy in ('urllib3','chromadb'):
+        logging.getLogger(noisy).setLevel(logging.WARNING)
+
+
+
+
+
+
+
+
+
+
+
+
+
 

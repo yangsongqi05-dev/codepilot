@@ -2,3 +2,4 @@ requests
 pytest
 chromadb
 redis
+python-dotenv
