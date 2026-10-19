@@ -23,14 +23,7 @@ def read_file(rel):
         return f'文件不存在：{rel}'
     with open(path,encoding='utf_8') as f:
         return f.read()
-# if __name__ == '__main__':
-#     print(list_files('demo_project'))
-#     print('---')
-#     print(read_file('demo_project/calc.py'))
-#     print('---')
-#     print(read_file('demo_project/nope.py'))
-#     print('---')
-#     print(read_file('../../config.py'))
+
 
 
 def write_file(rel, content):
@@ -54,16 +47,6 @@ def edit_file(rel, old,new):
         f.write(text.replace(old,new))
     return f'已修改{rel}'
 
-# if __name__ == '__main__':
-#     print(write_file('demo_project/tmp.txt', 'hello\nworld\n'))
-#     print('---')
-#     print(edit_file('demo_project/tmp.txt', 'world', 'CodePilot'))
-#     print('---')
-#     print(edit_file('demo_project/tmp.txt', 'l', 'X'))
-#     print('---')
-#     print(edit_file('demo_project/tmp.txt', 'zzz', 'X'))
-#     print('---')
-#     print(read_file('demo_project/tmp.txt'))
 
 def search_code(keyword, rel='.',max_hit=40):
     path = safe_path(rel)

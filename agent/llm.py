@@ -34,12 +34,7 @@ def chat(messages):
     return resp.json()['choices'][0]['message']['content']
 
 
-# if __name__ == '__main__':
-#     messages = [
-#         {'role': 'system', 'content': build_system_prompt()},
-#         {'role': 'user', 'content': '先看看 demo_project 里有什么文件'},
-#     ]
-#     print(chat(messages))
+
 
 def parse_action(text):
     raw = text.strip()
@@ -60,19 +55,6 @@ def parse_action(text):
         return  None,'缺少action或final字段'
     return obj,None
 
-# if __name__ == '__main__':
-#     tests = [
-#         '{"thought": "看看目录", "action": "list_files", "args": {"rel": "."}}',
-#         '```json\n{"thought": "看看目录", "action": "list_files", "args": {"rel": "."}}\n```',
-#         '好的，我先看一下：\n{"thought": "看看目录", "action": "list_files", "args": {"rel": "."}}\n以上。',
-#         '我不知道该怎么做',
-#         '{"thought": "完成了", "result": "ok"}',
-#     ]
-#     for i, t in enumerate(tests, 1):
-#         obj, err = parse_action(t)
-#         print(f'--- 第 {i} 条 ---')
-#         print('  结果:', obj)
-#         print('  错误:', err)
 
 
 
