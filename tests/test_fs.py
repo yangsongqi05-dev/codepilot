@@ -18,6 +18,7 @@ def test_上级目录被拒绝():
 def test_读密钥文件被拒绝():
     with pytest.raises(ValueError):
         safe_path('../../api_key.txt.txt')
+@pytest.mark.skipif(os.name != 'nt', reason='反斜杠只在 Windows 上是路径分隔符')
 def test_反斜杠越界也被拒绝():
     with pytest.raises(ValueError):
         safe_path('..\\..\\config.py')
