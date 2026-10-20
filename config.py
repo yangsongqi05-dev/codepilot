@@ -15,7 +15,7 @@ def get_headers():
     if not API_KEY:
         raise RuntimeError('API_KEY not set')
     return {
-        'Authorization': f'Bearer {key}',
+        'Authorization': f'Bearer {API_KEY}',
         'Content-Type': 'application/json'
     }
 DOCKER_IMAGE = 'codepilot-python'
@@ -27,7 +27,7 @@ EMBED_URL = 'https://api.siliconflow.cn/v1/embeddings'
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 def setup_logging():
     logging.basicConfig(
         level=LOG_LEVEL,

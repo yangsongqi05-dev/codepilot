@@ -3,6 +3,8 @@ from agent.llm import build_system_prompt,chat,parse_action
 from config import MAX_STEPS
 from tools.registry import call_tool
 logger = logging.getLogger(__name__)
+from langsmith import traceable
+@traceable
 def run(task):
     messages = [
         {'role':'system','content':build_system_prompt()},

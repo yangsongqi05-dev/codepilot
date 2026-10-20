@@ -22,6 +22,8 @@ def build_system_prompt():
             '- 一次只调一个工具。\n'
             '- 你输出的全部内容必须是一个 JSON 对象，不要用 ``` 代码块包起来。\n'
     )
+from langsmith import traceable          # ← 新加
+@traceable(run_type="llm")
 def chat(messages):
     data={
         'model':CHAT_MODEL,

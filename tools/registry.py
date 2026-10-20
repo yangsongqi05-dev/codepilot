@@ -61,6 +61,8 @@ def tools_prompt():
         for p,d in t['params'].items():
             lines.append(f'  {p}:{d}')
     return '\n'.join(lines)
+from langsmith import traceable          # ← 新加
+@traceable(run_type="tool")
 def call_tool(name,args):
     if name not in TOOLS:
         return f'没有这个工具：{name}。可用的是：{",".join(TOOLS)}'
