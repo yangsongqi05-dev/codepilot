@@ -15,13 +15,13 @@ TOOLS={
     },
     'write_file': {
         'fn': write_file,
-        'desc': '把内容写入一个文件（会覆盖原文）',
+        'desc': '把内容写入一个文件（会覆盖原文；测试和配置文件会被拒绝）',
         'params': {'rel': '（必填）文件相对路径',
                    'content':'(必填)要写入的完整内容'}
     },
     'edit_file': {
         'fn': edit_file,
-        'desc': '把文件里唯一出现的一段文本换成新文本',
+        'desc': '把文件里唯一出现的一段文本换成新文本（测试和配置文件会被拒绝）',
         'params': {'rel': '(必填)文件相对路径',
                    'old':'(必填)要被替换的原文，必须在文件里唯一出现',
                    'new':'(必填)替换成什么'}
@@ -77,8 +77,6 @@ if __name__ == '__main__':
     print(tools_prompt())
     print('====')
     print(call_tool('search_codebase', {'query': '怎么把一堆数加起来然后除以它们的个数'}))
-
-
 
 
 

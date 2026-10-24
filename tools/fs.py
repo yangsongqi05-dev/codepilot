@@ -1,7 +1,35 @@
 import os
+
+
+
 from config import WORKSPACE
 TEXT_EXTS = ('.py', '.txt', '.md', '.json', '.yml', '.yaml', '.toml', '.cfg', '.ini', '.html', '.css', '.js')
 SKIP_DIRS = {'.git', '.venv', '__pycache__', 'node_modules', '.idea'}
+PROTECTED_NAMES={
+    'conftest.py',
+    'pytest.ini',
+    'pyproject.toml',
+    'tox.ini',
+    'requirements.txt',
+    'dockerfile',
+    '.env',
+}
+PROTECTED_DIRS = {'.git', '.github', '.venv', '.idea'}
+
+def _readonly_msg(rel):
+    normalized = rel.replace('\\','/')
+    parts = [part for part in normalized.split('/') if part not in ('','.')]
+    if not parts:
+        return None
+    filename = parts[-1].lower()
+    parent_dirs = {part.lower() for part in parts[:-1]}
+    is_test = filename.endswith('.py')and(
+        filename.startswith('test_') or filename.endswith('_test.py')
+    )
+    if filename in PROTECTED_NAMES or is_test or parent_dirs & PROTECTED_DIRS:
+        return f'{rel} 是测试或配置文件，受保护，不允许修改。请修改被测源码。'
+    return None
+
 def safe_path(rel):
     root = os.path.join(WORKSPACE)
     full =os.path.abspath(os.path.join(root,rel))
@@ -28,12 +56,18 @@ def read_file(rel):
 
 def write_file(rel, content):
     path = safe_path(rel)
+    protected = _readonly_msg(rel)
+    if protected:
+        return protected
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path,'w',encoding='utf_8') as f:
         f.write(content)
     return f'已写入{rel}({len(content)}字符)'
 def edit_file(rel, old,new):
     path = safe_path(rel)
+    protected = _readonly_msg(rel)
+    if protected:
+        return protected
     if not os.path.isfile(path):
         return f'文件不存在:{rel}'
     with open(path,encoding='utf_8') as f:
@@ -69,15 +103,13 @@ def search_code(keyword, rel='.',max_hit=40):
                 continue
     return '\n'.join(hits) if hits else f'没有找到：{keyword}'
 
+
 if __name__ == '__main__':
     print(search_code('average'))
     print('---')
     print(search_code('zzzzz'))
     print('---')
     print(search_code('import'))
-
-
-
 
 
 

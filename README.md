@@ -174,7 +174,7 @@ python -m pytest -q
 ```
 
 ```
-16 passed, 1 skipped in 1.07s
+20 passed
 ```
 
 覆盖的是**最容易坏、坏了最危险**的地方：
@@ -184,6 +184,7 @@ python -m pytest -q
 | `safe_path` × 6 | 路径越界必须抛异常 —— 这是唯一挡在密钥文件前面的东西 |
 | `parse_action` × 7 | 模型输出带围栏 / 带废话 / 根本不是 JSON 时不能崩 |
 | `edit_file` × 4 | 原文找不到、匹配多次时 **文件必须一个字节都不变** |
+| 文件保护 × 3 | 测试文件、CI 配置和业务源码都被测试覆盖；受保护文件被拒绝，业务源码仍可修改 |
 
 > 有一条 `skipif` 的测试，是因为它验的是 Windows 专有行为（反斜杠是路径分隔符），CI 跑在 Linux 上会跳过 —— **这是 CI 第一天就抓出来的真问题。**
 
@@ -202,7 +203,7 @@ codepilot/
 │   ├── code_index.py   # 按函数切块 + 嵌入 + Chroma 检索
 │   ├── cache.py        # Redis 嵌入缓存
 │   └── registry.py     # 工具注册表：给模型的说明书 + 调度器
-├── tests/              # 17 个测试
+├── tests/              # 20 个测试
 ├── workspace/          # Agent 的活动范围（沙箱靶子）
 ├── .github/workflows/  # CI：每次 push 自动跑测试
 ├── config.py / main.py / Dockerfile / pytest.ini / requirements.txt
@@ -223,6 +224,6 @@ codepilot/
 跟另一个 RAG 项目保持一致（同一个 `BGE-M3`），而且省掉几百 MB 的模型下载。代价是依赖网络 —— 所以加了 Redis 缓存，同一个文本只算一次。
 
 **已知不足**
-- 拦不住 Agent 去改测试文件（它可以把 `assert == 2` 改成 `== 1.0` 让测试变绿）
+- 测试和配置文件已在 `write_file/edit_file` 工具层被拦截；但通过 `run_python` 执行自建脚本仍可能绕过，后续需用只读挂载或更细的容器权限继续收紧
 - 索引不是实时的，改完代码要手动重建
 - 没有并发，一次只跑一个任务
